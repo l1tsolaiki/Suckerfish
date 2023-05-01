@@ -1,31 +1,47 @@
 package com.l1tsolaiki.suckerfish
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
-import java.text.SimpleDateFormat
-import java.util.*
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import com.l1tsolaiki.suckerfish.databinding.ActivityMainBinding
+
+const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var number: TextView
-    private lateinit var button: Button
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        number = findViewById(R.id.textView)
-        button = findViewById(R.id.button)
-
-        button.setOnClickListener {
-            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-            val currentDate = sdf.format(Date())
-
-            Log.i( "Click listener", "${currentDate.toString()}")
-            number.text = "${currentDate.toString()}"
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.button.setOnClickListener {
+            Log.i("onCreate", "In listener 1")
+            sendMessage(it)
         }
+        binding.button2.setOnClickListener {
+            Log.i("onCreate", "In listener 1")
+            musicActivity(it)
+        }
+    }
+
+    fun sendMessage(view: View) {
+        Toast.makeText(baseContext, "Message sent!" , Toast.LENGTH_SHORT).show()
+        Log.i("sendMessage", "message sent.")
+        val editText = findViewById<EditText>(R.id.editTextTextPersonName)
+
+        val intent = Intent(this, DisplayMessageActivity::class.java).apply {
+            putExtra(EXTRA_MESSAGE, binding.editTextTextPersonName.text.toString())
+        }
+        startActivity(intent)
+    }
+
+    fun musicActivity(view: View) {
+        val intent = Intent(this, MusicActivity::class.java)
+        startActivity(intent)
     }
 }
